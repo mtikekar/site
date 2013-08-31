@@ -2,9 +2,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
-
+import           Text.Pandoc
 
 --------------------------------------------------------------------------------
+myPandocCompiler = pandocCompilerWith def def {writerHTMLMathMethod=MathJax ""} 
+{- need to add mathjax.js link to template. pandoc adds it if given with MathJax ".."
+   but hakyll seems to ignore it -}
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
@@ -15,7 +19,13 @@ main = hakyll $ do
         route   idRoute
         compile compressCssCompiler
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
+    match "contact.html" $ do
+        route idRoute
+        compile $ getResourceBody
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= relativizeUrls
+
+    match (fromList ["research.markdown", "about.rst"]) $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
@@ -23,18 +33,18 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ myPandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/defaultPost.html" postCtx
             >>= relativizeUrls
 
-    create ["archive.html"] $ do
+    create ["blog.html"] $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Archives"            `mappend`
+                    constField "title" "Blog"                `mappend`
                     defaultContext
 
             makeItem ""
