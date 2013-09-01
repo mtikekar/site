@@ -24,9 +24,9 @@ numbers) which results in the longest hailstone sequence.
 C implementation
 ================
 
-[src](src/collatz.c)
+[collatz.c](src/collatz.c)
 
-~~~~ {.c .numberLines include="collatz.c"}
+~~~~ {.c include="collatz.c"}
 #include <stdio.h>
 
 int main(int argc, char **argv) {
@@ -73,9 +73,9 @@ Haskell implementation
 The Haskell code is quite short and more importantly, it seems to
 express the idea rather than give a particular implementation.
 
-[src](src/collatz.hs)
+[collatz.hs](src/collatz.hs)
 
-~~~~ {.haskell .numberLines include="collatz.hs"}
+~~~~ {.haskell include="collatz.hs"}
 import Data.Word
 import Data.List
 import System.Environment
@@ -115,9 +115,9 @@ by `iterate` and `takeWhile` which are finally reduced by `length`. To
 test this, let's write a function `lenIterWhile` that combines the three
 into one without generating any intermediate lists.
 
-[src](src/collatz1.hs)
+[collatz1.hs](src/collatz1.hs)
 
-~~~~ {.haskell .numberLines include="collatz1.hs"}
+~~~~ {.haskell include="collatz1.hs"}
 import Data.Word
 import Data.List
 import System.Environment
@@ -156,9 +156,9 @@ library](http://hackage.haskell.org/package/stream-fusion) with
 `cabal install stream-fusion`. Armed with this library, we can get rid
 of the ugly `lenIterWhile` and write instead:
 
-[src](src/collatz2.hs)
+[collatz2.hs](src/collatz2.hs)
 
-~~~~ {.haskell .numberLines include="collatz2.hs"}
+~~~~ {.haskell include="collatz2.hs"}
 import Data.Word
 import qualified Data.List.Stream as S
 import System.Environment
@@ -185,9 +185,9 @@ Cython implementation
 
 To compare with another high-level language:
 
-[src](src/cycollatz.pyx)
+[cycollatz.pyx](src/cycollatz.pyx)
 
-~~~~ {.python .numberLines include="cycollatz.pyx"}
+~~~~ {.python include="cycollatz.pyx"}
 import sys
 
 cdef int collatzLen(int a0):

@@ -21,9 +21,9 @@ which results in the longest hailstone sequence.
 
 # C implementation
 
-[src](src/collatz.c)
+[collatz.c](src/collatz.c)
 
-```{.c .numberLines include="collatz.c"}
+```{.c  include="collatz.c"}
 ```
 
 On my machine (with gcc 4.7.3), it takes 0.4 seconds to find the
@@ -44,9 +44,9 @@ sys	0m0.004s
 The Haskell code is quite short and more importantly, it seems to express the
 idea rather than give a particular implementation.
 
-[src](src/collatz.hs)
+[collatz.hs](src/collatz.hs)
 
-```{.haskell .numberLines include="collatz.hs"}
+```{.haskell  include="collatz.hs"}
 ```
 
 But, it takes an atrocious 6 seconds for the same computation (with ghc 7.6.2
@@ -71,9 +71,9 @@ something to do with the multiple lists being created by `iterate` and
 function `lenIterWhile` that combines the three into one without generating any
 intermediate lists.
 
-[src](src/collatz1.hs)
+[collatz1.hs](src/collatz1.hs)
 
-```{.haskell .numberLines include="collatz1.hs"}
+```{.haskell  include="collatz1.hs"}
 ```
 
 This brings the time down to 0.54 seconds! This is quite close to the C speed
@@ -87,9 +87,9 @@ functions in Prelude and Data.List. You can install the [stream fusion library]
 with `cabal install stream-fusion`. Armed with this library, we can get rid of
 the ugly `lenIterWhile` and write instead:
 
-[src](src/collatz2.hs)
+[collatz2.hs](src/collatz2.hs)
 
-```{.haskell .numberLines include="collatz2.hs"}
+```{.haskell  include="collatz2.hs"}
 ```
 
 Notice that we only had to modify our first Haskell code to use list functions
@@ -101,9 +101,9 @@ this is slightly faster than our previous code, possibly because the `map` and
 
 To compare with another high-level language:
 
-[src](src/cycollatz.pyx)
+[cycollatz.pyx](src/cycollatz.pyx)
 
-```{.python .numberLines include="cycollatz.pyx"}
+```{.python  include="cycollatz.pyx"}
 ```
 
 The code is more verbose and looks rather similar to the C code. But, at 0.47

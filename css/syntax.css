@@ -1,8 +1,12 @@
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
+
 table.sourceCode { width: 100%; }
+
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+
 td.sourceCode { padding-left: 5px; }
+
 code > span.kw { color: #007020; font-weight: bold; }
 code > span.dt { color: #902000; }
 code > span.dv { color: #40a070; }
@@ -15,3 +19,44 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
+
+code{
+  font-family: 'Lucida Console', Monaco, monospace;
+  font-size: 90%;
+}
+
+pre{
+  border-top: 1pt solid #ddd;
+  border-bottom: 1pt solid #ddd;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+table
+    {
+    border-collapse: collapse;
+    border-spacing: 0; /* IE 6 */
+
+    border-bottom: 2pt solid #ddd;
+    border-top: 2pt solid #ddd; /* The caption on top will not have a bottom-border */
+
+    /* Center */
+    margin-left: auto;
+    margin-right: auto;
+    }
+    
+thead /* Entire table header */
+    {
+    border-bottom: 1pt solid #ddd;
+    }
+td, th /* Table cells and table header cells */
+    { 
+    vertical-align: top; /* Word */
+    vertical-align: baseline; /* Others */
+    padding-left:   0.5em;
+    padding-right:  0.5em;
+    padding-top:    0.2em;
+    padding-bottom: 0.2em;
+    }
+th{font-weight: normal; padding: 0.4em 0.5em 0.4em 0.5em;}
+
