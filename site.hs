@@ -9,8 +9,10 @@ myPandocCompiler = pandocCompilerWith def def {writerHTMLMathMethod=MathJax ""}
 {- need to add mathjax.js link to template. pandoc adds it if given with MathJax ".."
    but hakyll seems to ignore it -}
 
+myHakyll = hakyllWith (def {deployCommand = "rsync -a --progress _site/ athena.dialup:www"})
+
 main :: IO ()
-main = hakyll $ do
+main = myHakyll $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
