@@ -1,5 +1,5 @@
 ---
-title: Magical features of Bluespec SystemVerilog (BSV)
+title: Advanced features of Bluespec SystemVerilog (BSV)
 ---
 
 # Type inference
@@ -84,7 +84,7 @@ text better. Writing the full type every time is cumbersome, so I'll use a
 shorthand notation:
 
 ```{.bsv}
-function int f(int x1, int x2) <=> (int, int) $\rightarrow $ int
+function int f(int x1, int x2)  ↔  (int, int) → int
 ```
 
 ## Currying
@@ -140,8 +140,8 @@ int)` can be written as `(int, int) → int`. Thus, the normal and curried forms
 are completely equivalent. i.e.
 
 ```{.bsv}
-f(x, y)           <=> f(x)(y)
-(int, int) → int <=> int → (int → int)
+f(x, y)           ↔  f(x)(y)
+(int, int) → int  ↔  int → (int → int)
 ```
 
 The parentheses can be dropped without ambiguity to specify `f1`'s type as

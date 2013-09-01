@@ -1,0 +1,1 @@
+rsync -az --progress _site/* athena.dialup:www/
