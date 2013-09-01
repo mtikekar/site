@@ -3,11 +3,21 @@
 import           Data.Monoid (mappend)
 import           Hakyll
 import           Text.Pandoc
+import           System.IO.Unsafe
 
 --------------------------------------------------------------------------------
-myPandocCompiler = pandocCompilerWith def def {writerHTMLMathMethod=MathJax ""} 
+myPandocCompiler = pandocCompilerWithTransform def def {writerHTMLMathMethod=MathJax ""} (unsafeDupablePerformIO . (doInclude "posts/"))
 {- need to add mathjax.js link to template. pandoc adds it if given with MathJax ".."
    but hakyll seems to ignore it -}
+
+doInclude :: FilePath -> Pandoc -> IO Pandoc
+doInclude incPath = bottomUpM doInc where
+    doInc :: Block -> IO Block
+    doInc cb@(CodeBlock (id, classes, namevals) contents) =
+      case lookup "include" namevals of
+           Just f     -> return . (CodeBlock (id, classes, namevals)) =<< readFile (incPath ++ f)
+           Nothing    -> return cb
+    doInc x = return x
 
 main :: IO ()
 main = hakyll $ do
@@ -19,11 +29,11 @@ main = hakyll $ do
         route idRoute
         compile (makeItem ("mehultikekar.github.io\n======================\n\nPersonal website\n"::String))
 
-    match "images/*.jpg" $ do
+    match ("images/*.jpg" .||. "images/*.png") $ do
         route   idRoute
         compile copyFileCompiler
     
-    match "posts/src/*" $ do
+    match ("posts/src/*") $ do
         route idRoute
         compile copyFileCompiler
 
@@ -31,19 +41,7 @@ main = hakyll $ do
         route   idRoute
         compile compressCssCompiler
 
-    match "contact.html" $ do
-        route idRoute
-        compile $ getResourceBody
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
-
-    match (fromList ["research.markdown", "about.rst"]) $ do
-        route   $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
-
-    match "posts/*" $ do
+    match "posts/*.markdown" $ do
         route $ setExtension "html"
         compile $ myPandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
@@ -64,6 +62,17 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
+    match "contact.html" $ do
+        route idRoute
+        compile $ getResourceBody
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= relativizeUrls
+
+    match "research.markdown" $ do
+        route   $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= relativizeUrls
 
     match "index.html" $ do
         route idRoute
