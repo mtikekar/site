@@ -2,7 +2,7 @@
 title: How git works
 ---
 
-Git has many commands which makes it rather intimidating to learn and use. I had used git for about two years, but I got comfortable with it only after reading this excellent [article](http://ftp.newartisans.com/pub/git.from.bottom.up.pdf) about what git really does behind the scenes. This tutorial is an attempt to explain it all in simple terms. I assume you are somewhat familiar with the basic git commands for creating a repo, adding files and creating commits.
+Git has many commands which makes it rather intimidating to learn and use. But don't be fooled, for behind its complex interface is a simple core. I had used git for about two years, but I got comfortable with it only after reading this excellent [article](http://ftp.newartisans.com/pub/git.from.bottom.up.pdf) about what git really does behind the scenes. This tutorial is an attempt to explain it all in simple terms. I assume you have already used git (or some equivalent version control software) for a bit and are curious as to how it works.
 
 # What's in the .git folder?
 
@@ -13,7 +13,7 @@ $ echo "Hello World" > sample.txt
 $ git add sample.txt
 ```
 
-You'll find a new file `objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238` which contains some binary data. This file is called a *blob*. The blob's filename is obtained by hashing the contents of the `sample.txt`. Git's hash function can be run by calling `git hash-object`.
+You'll find a new file `objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238` which contains some binary data. This file is called a *blob*. The blob's filename is obtained by hashing the contents of the `sample.txt`. Git's hash function can be run by calling `git hash-object`. The hash function computes a 160-bit hash value from its input. We cannot compute the input back from its hash value, but if two hashes are equal, we can be sure that the inputs were the same. So, the hash acts as a fast identification for the data.
 
 ```
 $ echo "Hello World" | git hash-object --stdin
@@ -23,13 +23,17 @@ $ echo "Hello World" | git hash-object --stdin
 You can see that the first two digits make the directory name `55` and the rest make the file name. The contents of the blob are a compressed form of whatever is in `sample.txt`. You can see the file's type and decompress it using `git cat-file`.
 
 ```
-$ git cat-file -t 557d
+$ git cat-file -t 557db03
 blob
-$ git cat-file -p 557d
+$ git cat-file -p 557db03
 Hello World
 ```
 
-Notice that I didn't write the full file name, the first four letters are enough (except when multiple files share the same first letters, in which case you need to give as many letters as required to uniquely determine the file). Also, notice that the name `sample.txt` does not appear in the blob's filename or in its contents. Now, let's create a commit and observe what happens to the repo.
+Notice that I didn't write the full hash id, you only need to give as many letters as required to uniquely determine the file. Also, notice that the name `sample.txt` does not appear in the blob's filename or in its contents. We'll denote the blob as:
+
+![](/images/git-1.png)
+
+Now, let's create a commit and observe what happens to the repo.
 
 ```
 $ git commit -m "First commit"
@@ -38,7 +42,7 @@ $ git commit -m "First commit"
  create mode 100644 test.txt
 ```
 
-The number `9179d8b` is the commit's id (you will see a different commit id for reasons that will be clear soon), and the number `100644` records the file's type and permissions (in this case, a simple non-executable file). In the `objects` folder, you'll have a file `7c/55c57⋯` and one that corresponds to the commit id (`91/79d8b⋯` in my case). Let's see what these files are and what they contain:
+The number `9179d8b` is the commit's id (you will see a different commit id for reasons that will be clear soon. We'll also see what `master (root-commit)` is.), and the number `100644` records the file's type and permissions (in this case, a simple non-executable file). In the `objects` folder, you'll have a file `7c/55c57⋯` and one that corresponds to the commit id (`91/79d8b⋯` in my case). Let's see what these files are and what they contain:
 
 ```
 $ git cat-file -t 7c55c57
@@ -55,8 +59,65 @@ committer mtikekar <mtikekar-Satellite-U845> 1378109545 -0400
 
 First commit
 ```
-The first file stores a *tree* which contains a list of blobs and any sub-trees along with their ids. This tree corresponds to the top-level folder that we are tracking. The second file contains information about the commit such as the committer's name and email, time of commit, commit message and the id of the tree that corresponds to the top-level folder. The top-level folder is also called `working tree`.
+The first file is a *tree* which lists the blob corresponding to `sample.txt`. In general, a tree lists all blobs and sub-trees that are in a folder. The second file is a *commit* containing information such as the committer's name and email, time of commit, commit message and the id of the tree that corresponds to the top-level folder. The top-level folder is also called *working tree*. The ids of trees and commits are generated from their content. This is why you will have a different commit id - although the working tree is the same, the committer name and time of commit will be different. This looks like:
 
-# Git's object model
+![](/images/git-2.png)
 
-Now, create a folder and 
+To summarise,
+
+- *Blob* stores the contents of a file. To check if a particular file is stored in `objects`, we hash its contents and check if a file by that name exists.
+- *Tree* stores the directory structure including blobs for files and trees for sub-folders with their names and hash ids. To look up the contents of a file given the file path, we go follow the tree and get the file's id, from which we can fetch the file's contents.
+- *Commit* stores some metadata and the id of the top-level tree. The commit id is a hash of the meta-deta and the working tree id, which in turn is a hash of all its files and folders. Thus, the commit id can uniquely determine all the content of the commit.
+
+# Commit history
+
+Now, let's create a new folder, add two files to it, commit everything, and read the commit file.
+
+```
+$ mkdir folder
+$ echo "Hello World" > folder/file1.txt
+$ echo "Goodbye World" > folder/file2.txt
+$ git add folder
+$ git commit -m "Second commit"
+[master 420e7d3] Second commit
+ 2 files changed, 2 insertions(+)
+ create mode 100644 folder/file1.txt
+ create mode 100644 folder/file2.txt
+
+$ git cat-file -p 420e7d3
+tree fec7ed238c863505fc56769f3cb0069e335eed29
+parent 9179d8b8250161dee23f0cf202e662978429f120
+author mtikekar <mtikekar-Satellite-U845> 1378154385 -0400
+committer mtikekar <mtikekar-Satellite-U845> 1378154385 -0400
+
+Second commit
+```
+
+We notice a new field - `parent` which is the commit id of the first commit. If you read the `tree`, you'll see this:
+
+```
+$ git cat-file -p fec7ed2
+040000 tree c5fb86183acf7f17c7eac380c64dee9ebf065100	folder
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238	sample.txt
+$ git cat-file -p c5fb861
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238	file1.txt
+100644 blob 556e69d338c5bdc47ce78b5fb512d3dd300daeec	file2.txt
+```
+
+![](/images/git-3.png)
+
+You'll notice that `sample1.txt` from both commits and `folder/test1.txt` from the second commit all point to the same blob because the three have the same contents: "Hello World".
+
+The `parent` field in the commit metadata lets us create a history of the project by linking all the commits. It is possible for multiple commits to have the same parent. For example, Alice and Bob can work on the same code base independently and create commits on top of a common ancestor. If they decide to merge their work, git can automatically combine the changes made by each person and create a new commit. This commit will be have two parents - the last commits made by the two. This is depicted below:
+
+![](/images/git-4.png)
+
+In general, it is possible to have multiple branches of development present in a repository simultaneously (such as before Alice and Bob merged their commits). You keep track of the branches by a reference to the latest commit.
+
+TODO: Split this up into pre-merge, post-merge.
+
+TODO: make "git command -> object model" time series images for
+
+  - git init, git add, git commit
+  - git branch, git checkout, git merge
+  - git fetch
