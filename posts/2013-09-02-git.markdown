@@ -1,0 +1,62 @@
+---
+title: How git works
+---
+
+Git has many commands which makes it rather intimidating to learn and use. I had used git for about two years, but I got comfortable with it only after reading this excellent [article](http://ftp.newartisans.com/pub/git.from.bottom.up.pdf) about what git really does behind the scenes. This tutorial is an attempt to explain it all in simple terms. I assume you are somewhat familiar with the basic git commands for creating a repo, adding files and creating commits.
+
+# What's in the .git folder?
+
+Create a new repo with `git init` and take a look inside the `.git` folder. In particular, we are interested in the `objects` folder which has two empty folders - `info` and `pack`. Now, create a new file with some dummy content and add it to git.
+
+```
+$ echo "Hello World" > sample.txt
+$ git add sample.txt
+```
+
+You'll find a new file `objects/55/7db03de997c86a4a028e1ebd3a1ceb225be238` which contains some binary data. This file is called a *blob*. The blob's filename is obtained by hashing the contents of the `sample.txt`. Git's hash function can be run by calling `git hash-object`.
+
+```
+$ echo "Hello World" | git hash-object --stdin
+557db03de997c86a4a028e1ebd3a1ceb225be238
+```
+
+You can see that the first two digits make the directory name `55` and the rest make the file name. The contents of the blob are a compressed form of whatever is in `sample.txt`. You can see the file's type and decompress it using `git cat-file`.
+
+```
+$ git cat-file -t 557d
+blob
+$ git cat-file -p 557d
+Hello World
+```
+
+Notice that I didn't write the full file name, the first four letters are enough (except when multiple files share the same first letters, in which case you need to give as many letters as required to uniquely determine the file). Also, notice that the name `sample.txt` does not appear in the blob's filename or in its contents. Now, let's create a commit and observe what happens to the repo.
+
+```
+$ git commit -m "First commit"
+[master (root-commit) 9179d8b] First commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test.txt
+```
+
+The number `9179d8b` is the commit's id (you will see a different commit id for reasons that will be clear soon), and the number `100644` records the file's type and permissions (in this case, a simple non-executable file). In the `objects` folder, you'll have a file `7c/55c57⋯` and one that corresponds to the commit id (`91/79d8b⋯` in my case). Let's see what these files are and what they contain:
+
+```
+$ git cat-file -t 7c55c57
+tree
+$ git cat-file -p 7c55c57
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238	sample.txt
+
+$ git cat-file -t 9179d8b
+commit
+$ git cat-file -p 9179d8b
+tree 7c55c57a0286a3432dbeb3e1fd5d1c447cf00cee
+author mtikekar <mtikekar-Satellite-U845> 1378109545 -0400
+committer mtikekar <mtikekar-Satellite-U845> 1378109545 -0400
+
+First commit
+```
+The first file stores a *tree* which contains a list of blobs and any sub-trees along with their ids. This tree corresponds to the top-level folder that we are tracking. The second file contains information about the commit such as the committer's name and email, time of commit, commit message and the id of the tree that corresponds to the top-level folder. The top-level folder is also called `working tree`.
+
+# Git's object model
+
+Now, create a folder and 
