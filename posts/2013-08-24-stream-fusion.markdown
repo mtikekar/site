@@ -1,5 +1,6 @@
 ---
 title: An example of fast numerical computation using Haskell
+mathjax: 1
 ---
 
 # Problem statement
@@ -29,7 +30,7 @@ which results in the longest hailstone sequence.
 On my machine (with gcc 4.7.3), it takes 0.4 seconds to find the
 longest sequence for the first million numbers.
 
-```{.bash}
+```
 $ gcc -O2 collatz.c
 $ time ./a.out 1000000
 (329, 837799)
@@ -52,7 +53,7 @@ idea rather than give a particular implementation.
 But, it takes an atrocious 6 seconds for the same computation (with ghc 7.6.2
 and llvm 3.2)
 
-```{.bash}
+```
 $ ghc -O2 -fllvm collatz.hs
 $ time ./collatz
 (329,837799)
@@ -109,7 +110,7 @@ To compare with another high-level language:
 The code is more verbose and looks rather similar to the C code. But, at 0.47
 seconds (with cython 0.17.4), it is faster than the Haskell code.
 
-```{.bash}
+```
 $ cython --embed cycollatz.pyx
 $ gcc -O2 -I/usr/include/python2.7 cycollatz.c -lpython2.7 -o cycollatz
 $ time ./cycollatz 1000000

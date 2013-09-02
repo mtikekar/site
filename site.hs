@@ -16,8 +16,7 @@ pandocCompilerWithUnsafeTransform ropt wopt f = cached cacheName $
     cacheName = "Hakyll.Web.Page.pageCompilerWithPandoc"
     
 myPandocCompiler = pandocCompilerWithUnsafeTransform def def {writerHTMLMathMethod=MathJax ""} (doInclude "posts/")
-{- need to add mathjax.js link to template. pandoc adds it if given with MathJax ".."
-   but hakyll seems to ignore it -}
+{- need to add mathjax.js link to template -}
 
 doInclude :: FilePath -> Pandoc -> IO Pandoc
 doInclude incPath = bottomUpM doInc where
@@ -54,7 +53,7 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ myPandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/defaultPost.html" postCtx
+            >>= loadAndApplyTemplate "templates/default.html" (mappend postCtx $ constField "syntax" "1")
             >>= relativizeUrls
 
     create ["blog.html"] $ do
