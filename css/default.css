@@ -451,3 +451,19 @@ div.info {
     font-size: 14px;
     font-style: italic;
 }
+
+#headshot {
+ float: right;
+ margin: 10px;
+}
+
+@media only screen and (max-device-width : 650px){
+ body{ width:95%}
+}
+
+@media only screen and (max-device-width : 399px){
+ #headshot {float:none}
+ #aboutme {clear:both}
+}
+
+a{text-decoration: none}
