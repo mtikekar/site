@@ -2,11 +2,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import           Hakyll.Core.Compiler
 import           Text.Pandoc
-import           System.IO.Unsafe
+import           Control.Applicative ((<$>))
 
 --------------------------------------------------------------------------------
-myPandocCompiler = pandocCompilerWithTransform def def {writerHTMLMathMethod=MathJax ""} (unsafeDupablePerformIO . (doInclude "posts/"))
+pandocCompilerWithUnsafeTransform :: ReaderOptions -> WriterOptions -> (Pandoc -> IO Pandoc) -> Compiler (Item String)
+pandocCompilerWithUnsafeTransform ropt wopt f = cached cacheName $
+        readPandocWith ropt <$> getResourceBody
+    >>= withItemBody (unsafeCompiler . f)
+    >>= return . (writePandocWith wopt)
+  where
+    cacheName = "Hakyll.Web.Page.pageCompilerWithPandoc"
+    
+myPandocCompiler = pandocCompilerWithUnsafeTransform def def {writerHTMLMathMethod=MathJax ""} (doInclude "posts/")
 {- need to add mathjax.js link to template. pandoc adds it if given with MathJax ".."
    but hakyll seems to ignore it -}
 
