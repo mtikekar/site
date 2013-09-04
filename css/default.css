@@ -405,29 +405,31 @@ body {
 div#header {
     border-bottom: 2px solid black;
     margin-bottom: 30px;
-    padding: 12px 0px 12px 0px;
+    text-align:justify;
+    font-size:8px;
 }
+div#logo {margin-right: 12px;}
+div#navigation, div#logo {padding-top: 12px; display:inline-block}
+/* cause header's text-align:justify to push nav to right. boom goes on a new line
+   so it adds vertical white-space equal to header's font-size. I use that as padding */
+div#header #boom{display:inline-block; height:0; width:100%}
 
 div#logo a {
     color: black;
-    float: left;
     font-size: 18px;
     font-weight: bold;
     text-decoration: none;
 }
 
-div#header #navigation {
-    text-align: right;
-}
-
 div#header #navigation a {
     color: black;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     margin-left: 12px;
     text-decoration: none;
     text-transform: uppercase;
 }
+div#header #navigation a:first-child {margin-left: 0}
 
 div#footer {
     border-top: solid 2px black;
@@ -452,18 +454,25 @@ div.info {
     font-style: italic;
 }
 
-#headshot {
+img#headshot {
  float: right;
  margin: 10px;
 }
 
-@media only screen and (max-device-width : 650px){
+@media screen and (max-width : 640px){
  body{ width:95%}
 }
 
-@media only screen and (max-device-width : 399px){
- #headshot {float:none}
- #aboutme {clear:both}
+@media screen and (max-width : 480px){
+ img#headshot {float:none}
+ div#aboutme {clear:both}
 }
 
 a{text-decoration: none}
+
+.figure {
+    text-align:center;
+    margin-top:0px;
+    margin-bottom:0px;
+    padding:0px;
+}
