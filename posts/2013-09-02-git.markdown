@@ -121,3 +121,6 @@ TODO: make "git command -> object model" time series images for
   - git init, git add, git commit
   - git branch, git checkout, git merge
   - git fetch
+
+Do a basic text-only tutorial with
+git init, clone, add, commit, status, checkout, log
