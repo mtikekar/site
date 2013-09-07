@@ -23,14 +23,15 @@ into our brains?
 I think we label events as "cause" and "effect" is based on the fact that a
 single "effect" might have multiple likely "causes" while a "cause" always has
 the same effect. For example, we observe, in separate events, that two massive
-balls accelerate towards each other and two oppositely charged balls accelerate
-towards each other. Whenever we've observed two massive balls, they're always
-found to be accelerating closer, and so also when we've observed two charged
-balls. However, when we observe two balls accelerating towards each other, they're
-seen to be either oppositely charged or massive (or magnetic or whatever).
-It is by this asymmetry between force and acceleration that we label
-gravitational, electrical, and nuclear forces as "causes" the acceleration as the
-"effect".
+balls accelerate towards each other and that two oppositely charged balls
+accelerate towards each other. Whenever we've observed two massive balls,
+they're always found to be accelerating closer, and so also when we've observed
+two charged balls. However, when we observe two balls accelerating towards each
+other, they're seen to be either oppositely charged or massive (or magnetic or
+whatever).  It is by this asymmetry between force and acceleration that we
+label gravitational, electrical, and nuclear forces as "causes" the
+acceleration as the "effect". In logical terms, if an event implies another,
+the first is the cause, the second is the effect.
 
 This is probably what makes quantum mechanics so counter-intuitive. What we
 classically considered as "causes" can now have multiple possible "effects". If

@@ -23,7 +23,10 @@ doInclude incPath = bottomUpM doInc where
     doInc :: Block -> IO Block
     doInc cb@(CodeBlock (id, classes, namevals) contents) =
       case lookup "include" namevals of
-           Just f     -> return . (CodeBlock (id, classes, namevals)) =<< readFile (incPath ++ f)
+           Just f     -> do
+                          src <- readFile (incPath ++ f)
+                          let vals = filter ((/= "include") . fst) namevals
+                          return $ CodeBlock (id, classes, vals) (contents ++ src)
            Nothing    -> return cb
     doInc x = return x
 
