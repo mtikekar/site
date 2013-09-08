@@ -1,23 +1,24 @@
 ---
 title: An example of fast numerical computation using Haskell
-mathjax: 1
 ---
 
 # Problem statement
 
 Consider the sequence of natural numbers obtained from iterating 
 
-$a_{n+1} = \begin{cases} a_n/2 & a_n \text{ is even} \\
-                         (3a_n + 1)/2 & \text{ else} \end{cases}$
+---------- ---------------- ------------
+a~n+1~ =   a~n~ / 2         a~n~ is even
+           (3a~n~ + 1) / 2  else
+---------- ---------------- ------------
 
-starting with a given $a_0$. This is a slightly optimized version of the
-sequence in the [Collatz conjecture]. For example, with $a_0 =$ 12, the sequence
+starting with a given a~0~. This is a slightly optimized version of the
+sequence in the [Collatz conjecture]. For example, with a~0~ = 12, the sequence
 is [12, 6, 3, 5, 8, 4, 2, 1, 2, 1, ...]. The sequence is also called the
 hailstone sequence and the mathematician Collatz conjectured that it reaches 1
-for all values of $a_0$. When it reaches 1, it is stuck in the cycle [1, 2, 1, 2
+for all values of a~0~. When it reaches 1, it is stuck in the cycle [1, 2, 1, 2
 ...], so we will truncate the sequence at 1.
 
-In the current problem, we would like find that $a_0$ (in some range of numbers)
+In the current problem, we would like find that a~0~ (in some range of numbers)
 which results in the longest hailstone sequence.
 
 # C implementation
@@ -125,13 +126,13 @@ sys	0m0.008s
 
 The different implementations are compared in the table below. 
 
-Implementation                          Time    Readable
--------------------------------------- ------   --------
-[C](collatz.c)                          0.43s      less
-[Haskell (first pass)](collatz.hs)      5.99s      more
-[Haskell (optimized)](collatz1.hs)      0.54s      less
-[Haskell (stream fusion)](collatz2.hs)  0.51s      more
-[Cython](cycollatz.pyx)                 0.47s      less
+Implementation                              Time    Readable
+--------------------------------------     ------   --------
+[C](src/collatz.c)                          0.43s      less
+[Haskell (first pass)](src/collatz.hs)      5.99s      more
+[Haskell (optimized)](src/collatz1.hs)      0.54s      less
+[Haskell (stream fusion)](src/collatz2.hs)  0.51s      more
+[Cython](src/cycollatz.pyx)                 0.47s      less
 
 Readability of any piece of code is somewhat subjective, but I would say that
 the fastest Haskell code is more readable than C or Cython. I would expect

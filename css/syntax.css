@@ -23,6 +23,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 code{
   font-family: 'Lucida Console', Monaco, monospace;
   font-size: 90%;
+  /*white-space: pre;*/
 }
 
 pre{
@@ -30,6 +31,7 @@ pre{
   border-bottom: 1pt solid #ddd;
   padding-top: 1em;
   padding-bottom: 1em;
+  /*overflow-x:auto;*/
 }
 
 table
@@ -37,8 +39,8 @@ table
     border-collapse: collapse;
     border-spacing: 0; /* IE 6 */
 
-    border-bottom: 2pt solid #ddd;
-    border-top: 2pt solid #ddd; /* The caption on top will not have a bottom-border */
+    /*border-bottom: 2pt solid #ddd;*/
+    /*border-top: 2pt solid #ddd;*/ /* The caption on top will not have a bottom-border */
 
     /* Center */
     margin-left: auto;
