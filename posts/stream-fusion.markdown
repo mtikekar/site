@@ -1,15 +1,13 @@
 ---
 title: An example of fast numerical computation using Haskell
+date: August 24, 2013
 ---
 
 # Problem statement
 
 Consider the sequence of natural numbers obtained from iterating 
 
----------- ---------------- ------------
-a~n+1~ =   a~n~ / 2         a~n~ is even
-           (3a~n~ + 1) / 2  else
----------- ---------------- ------------
+a~n+1~ =  a~n~/2 if a~n~ is even, else (3a~n~ + 1)/2
 
 starting with a given a~0~. This is a slightly optimized version of the
 sequence in the [Collatz conjecture]. For example, with a~0~ = 12, the sequence

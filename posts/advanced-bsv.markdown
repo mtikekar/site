@@ -1,5 +1,6 @@
 ---
 title: Advanced features of Bluespec SystemVerilog (BSV)
+date: August 24, 2013
 ---
 
 # Type inference

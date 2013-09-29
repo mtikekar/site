@@ -15,7 +15,7 @@ pandocCompilerWithUnsafeTransform ropt wopt f = cached cacheName $
   where
     cacheName = "Hakyll.Web.Page.pageCompilerWithPandoc"
     
-myPandocCompiler = pandocCompilerWithUnsafeTransform def def {writerHTMLMathMethod=MathJax ""} (doInclude "posts/")
+myPandocCompiler = pandocCompilerWithUnsafeTransform def def {writerHTMLMathMethod=MathJax "", writerHighlight=True} (doInclude "posts/")
 {- need to add mathjax.js link to template -}
 
 doInclude :: FilePath -> Pandoc -> IO Pandoc
